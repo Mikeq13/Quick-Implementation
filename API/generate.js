@@ -83,7 +83,7 @@ function sanitize(str, maxLen) {
   return str.trim().replace(/\s{5,}/g, '\n').slice(0, maxLen);
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   setCORSHeaders(res);
 
   // Handle preflight
@@ -99,7 +99,14 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: 'Server misconfigured — API key missing.' });
 
   try {
-    const { step, idea, targetUser, priority, expLevel, depth, planText } = req.body || {};
+    // Safely parse body — Vercel may not auto-parse JSON depending on config
+    let parsed = {};
+    if (req.body && typeof req.body === 'object') {
+      parsed = req.body;
+    } else if (typeof req.body === 'string') {
+      try { parsed = JSON.parse(req.body); } catch { return res.status(400).json({ error: 'Invalid JSON body.' }); }
+    }
+    const { step, idea, targetUser, priority, expLevel, depth, planText } = parsed;
 
     // Validate step
     if (!VALID_STEPS.has(step)) return res.status(400).json({ error: 'Invalid step.' });
