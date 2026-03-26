@@ -1,0 +1,23 @@
+# Secrets — never commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Node (if build step added later)
+node_modules/
+dist/
+.next/
+
+# Logs
+*.log

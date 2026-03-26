@@ -6,25 +6,12 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
-<!--
-  NOTE: When deploying to Vercel, set these HTTP headers in vercel.json instead of meta tags.
-  Meta CSP is a fallback only — HTTP headers are enforced by the browser before the page loads.
-  See: /security/vercel.json in the repo.
--->
-<meta http-equiv="Content-Security-Policy" content="
-  default-src 'none';
-  script-src 'unsafe-inline';
-  style-src 'unsafe-inline' https://fonts.googleapis.com;
-  font-src https://fonts.gstatic.com;
-  connect-src https://api.anthropic.com;
-  img-src 'self' data:;
-  frame-ancestors 'none';
-">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none';">
 <title>Quick Implementation</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
-/* ── TOKENS ─────────────────────────────────────────── */
+/* ── TOKENS ── */
 :root {
   --bg:       #07080d;
   --surface:  #0d0e18;
@@ -58,11 +45,8 @@ body {
 /* ── HEADER ── */
 header {
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 26px;
-  height: 50px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 26px; height: 50px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
@@ -74,34 +58,22 @@ header {
   background: rgba(91,141,238,.12); border: 1px solid rgba(91,141,238,.25); color: var(--accent);
 }
 .pill.critic { background: rgba(232,133,90,.1); border-color: rgba(232,133,90,.25); color: var(--accent2); margin-left: auto; }
-.status-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--muted); transition: background .3s;
-}
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); transition: background .3s; }
 .status-dot.on { background: var(--green); box-shadow: 0 0 6px var(--green); }
 
 /* ── LAYOUT ── */
 .workspace {
-  display: grid;
-  grid-template-columns: 350px 1fr;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  display: grid; grid-template-columns: 350px 1fr;
+  flex: 1; min-height: 0; overflow: hidden;
 }
 
-/* ── LEFT ── */
+/* ── LEFT PANEL ── */
 .left-panel {
   border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--surface);
+  display: flex; flex-direction: column;
+  overflow: hidden; background: var(--surface);
 }
-.panel-head {
-  padding: 16px 20px 13px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
+.panel-head { padding: 16px 20px 13px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .panel-head h2 { font-family: var(--font-ui); font-size: 13px; font-weight: 700; }
 .panel-head p  { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
@@ -112,9 +84,7 @@ header {
 }
 
 .field { display: flex; flex-direction: column; gap: 5px; }
-.field label {
-  font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--label);
-}
+.field label { font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--label); }
 .field label .req { color: var(--accent); margin-left: 3px; }
 .field input,
 .field textarea,
@@ -135,7 +105,7 @@ header {
 .field select option { background: #1a1b2e; }
 
 .radio-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.radio-group.two  { grid-template-columns: 1fr 1fr; }
+.radio-group.two { grid-template-columns: 1fr 1fr; }
 .radio-opt {
   display: flex; align-items: center; gap: 7px;
   padding: 7px 10px; border-radius: 7px; cursor: pointer;
@@ -144,18 +114,14 @@ header {
   user-select: none;
 }
 .radio-opt input[type=radio] { display: none; }
-.radio-opt .dot {
-  width: 11px; height: 11px; border-radius: 50%;
-  border: 2px solid var(--border2); flex-shrink: 0; transition: all .15s;
-}
+.radio-opt .dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--border2); flex-shrink: 0; transition: all .15s; }
 .radio-opt.selected { border-color: var(--accent); color: var(--text); }
 .radio-opt.selected .dot { border-color: var(--accent); background: var(--accent); }
 
 .divider { height: 1px; background: var(--border); }
 
 .btn-run {
-  margin: 14px 20px 16px;
-  flex-shrink: 0;
+  margin: 14px 20px 16px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center; gap: 9px;
   background: var(--accent); color: #fff; border: none; border-radius: var(--radius);
   padding: 12px; font-family: var(--font-ui); font-size: 14px; font-weight: 700;
@@ -170,7 +136,7 @@ header {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── RIGHT ── */
+/* ── RIGHT PANEL ── */
 .right-panel { display: flex; flex-direction: column; overflow: hidden; }
 
 .tabs {
@@ -196,7 +162,7 @@ header {
 .tab-pane { display: none; }
 .tab-pane.active { display: block; }
 
-/* ── EMPTY ── */
+/* ── EMPTY STATE ── */
 .empty {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; height: 100%; gap: 10px;
@@ -205,7 +171,7 @@ header {
 .empty-icon { font-size: 34px; opacity: .35; }
 .empty p { font-size: 12px; }
 
-/* ── SECTIONS ── */
+/* ── PLAN SECTIONS ── */
 .section { margin-bottom: 22px; animation: fadeUp .35s ease both; }
 @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 .section-hd { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
@@ -256,131 +222,35 @@ header {
 .copy-btn:hover { background: rgba(91,141,238,.3); }
 .copy-btn.ok { color: var(--green); border-color: rgba(77,232,164,.4); }
 
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
-/* ── API KEY OVERLAY ── */
-.key-overlay {
-  position: fixed; inset: 0; z-index: 999;
-  background: rgba(7,8,13,.92);
-  backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-}
-.key-overlay.hidden { display: none; }
-.key-card {
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 14px; padding: 32px 28px;
-  width: 100%; max-width: 420px;
-  display: flex; flex-direction: column; gap: 18px;
-}
-.key-card h2 { font-family: var(--font-ui); font-size: 18px; font-weight: 800; }
-.key-card h2 em { color: var(--accent); font-style: normal; }
-.key-card p  { font-size: 12px; color: var(--muted); line-height: 1.6; }
-.key-input-row { display: flex; gap: 8px; }
-.key-input-row input {
-  flex: 1; background: var(--card); border: 1px solid var(--border2);
-  border-radius: 8px; color: var(--text);
-  font-family: var(--font-mono); font-size: 12.5px;
-  padding: 10px 12px; outline: none; transition: border-color .2s;
-  -webkit-text-security: disc; text-security: disc;
-}
-.key-input-row input:focus { border-color: var(--accent); }
-.key-input-row input.error { border-color: var(--red); }
-.btn-save-key {
-  background: var(--accent); color: #fff; border: none;
-  border-radius: 8px; padding: 10px 18px;
-  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
-  cursor: pointer; white-space: nowrap; transition: opacity .2s;
-}
-.btn-save-key:hover { opacity: .85; }
-.key-hint {
-  font-size: 11px; color: var(--muted); line-height: 1.6;
-  padding: 12px 14px; background: var(--card);
-  border-radius: 8px; border: 1px solid var(--border);
-}
-.key-hint a { color: var(--accent); text-decoration: none; }
-.key-hint a:hover { text-decoration: underline; }
-.key-err { font-size: 11px; color: var(--red); display: none; }
-.key-err.show { display: block; }
-/* Key indicator in header */
-.key-indicator {
-  margin-left: auto; display: flex; align-items: center; gap: 6px;
-  font-size: 10px; color: var(--muted); cursor: pointer;
-  padding: 4px 8px; border-radius: 6px;
-  border: 1px solid transparent; transition: border-color .2s, color .2s;
-}
-.key-indicator:hover { border-color: var(--border2); color: var(--label); }
-.key-indicator .ki-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-@media (max-width: 480px) {
-  .key-card { padding: 24px 18px; }
-  .key-input-row { flex-direction: column; }
-  .btn-save-key { width: 100%; padding: 11px; }
-}
-
-/* ── RESPONSIVE ─────────────────────────────────────────
-   Strategy: desktop = fixed viewport, mobile = natural scroll
-   Breakpoints: 820px (tablet), 480px (phone)
-──────────────────────────────────────────────────────── */
-
-/* ── TABLET (≤820px) ── */
+/* ── RESPONSIVE — tablet (≤820px) ── */
 @media (max-width: 820px) {
-  /* Switch to natural scroll — no more clipped overflow */
   body { height: auto; min-height: 100vh; overflow: auto; }
-
-  .workspace {
-    grid-template-columns: 1fr;
-    height: auto;
-    overflow: visible;
-  }
-
-  .left-panel {
-    max-height: none;          /* let form breathe fully */
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    overflow: visible;
-  }
-
+  .workspace { grid-template-columns: 1fr; height: auto; overflow: visible; }
+  .left-panel { max-height: none; border-right: none; border-bottom: 1px solid var(--border); overflow: visible; }
   .form-scroll { overflow: visible; }
-
-  .right-panel {
-    min-height: 80vh;          /* give output room */
-    overflow: visible;
-  }
-
+  .right-panel { min-height: 80vh; overflow: visible; }
   .output { overflow: visible; }
-
   .compare-grid { grid-template-columns: 1fr; }
 }
 
-/* ── PHONE (≤480px) ── */
+/* ── RESPONSIVE — phone (≤480px) ── */
 @media (max-width: 480px) {
-  /* Header — hide pills, keep logo + dot */
   header { padding: 0 16px; gap: 8px; }
   .pill  { display: none; }
-
-  /* Tighten form padding */
   .panel-head  { padding: 13px 15px 11px; }
   .form-scroll { padding: 13px 15px; gap: 12px; }
   .btn-run     { margin: 12px 15px 14px; font-size: 13px; }
-
-  /* Radio groups: always 2-col max on phone */
-  .radio-group     { grid-template-columns: 1fr 1fr; }
-  .radio-group.two { grid-template-columns: 1fr 1fr; }
-
-  /* Output */
+  .radio-group, .radio-group.two { grid-template-columns: 1fr 1fr; }
   .output { padding: 16px; }
-
-  /* Tabs — smaller text, scrollable */
   .tabs  { padding: 0 10px; }
   .tab   { padding: 11px 11px; font-size: 9.5px; letter-spacing: .5px; }
-
-  /* Sections */
-  .section-body { font-size: 12px; padding: 12px 13px; }
+  .section-body  { font-size: 12px; padding: 12px 13px; }
   .section-title { font-size: 10.5px; }
-
-  /* Handoff copy button — full width on phone */
   .handoff-box { padding: 42px 13px 13px; }
   .copy-btn    { right: auto; left: 13px; top: 10px; }
 }
@@ -388,34 +258,10 @@ header {
 </head>
 <body>
 
-<!-- ══ API KEY OVERLAY ══ -->
-<div class="key-overlay" id="keyOverlay">
-  <div class="key-card">
-    <div>
-      <h2>Quick<em>Impl</em></h2>
-      <p style="margin-top:6px">Enter your Anthropic API key to get started. Stored only for this browser session — sent exclusively to Anthropic.</p>
-    </div>
-    <div class="key-input-row">
-      <input type="text" id="keyInput" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false"
-             onkeydown="if(event.key==='Enter') saveKey()">
-      <button class="btn-save-key" onclick="saveKey()">Connect</button>
-    </div>
-    <div class="key-err" id="keyErr">Key must start with <code>sk-ant-</code> — check and try again.</div>
-    <div class="key-hint">
-      Get your free API key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.<br>
-      New accounts include free credits. Key is never stored permanently.
-    </div>
-  </div>
-</div>
-
 <header>
   <div class="logo">Quick<em>Impl</em></div>
   <div class="pill">PM · Architect</div>
   <div class="pill critic">Auto-Critic ✦</div>
-  <div class="key-indicator" id="keyIndicator" onclick="resetKey()" title="Click to change API key" style="display:none">
-    <span class="ki-dot"></span>
-    <span>API Key active · click to change</span>
-  </div>
   <div class="status-dot" id="statusDot"></div>
 </header>
 
@@ -431,12 +277,12 @@ header {
     <div class="form-scroll">
       <div class="field">
         <label>Idea <span class="req">✦</span></label>
-        <textarea id="f-idea" rows="3" placeholder="Describe what you want to build…"></textarea>
+        <textarea id="f-idea" rows="3" placeholder="Describe what you want to build…" maxlength="1500"></textarea>
       </div>
 
       <div class="field">
         <label>Target User <span class="req">✦</span></label>
-        <input id="f-user" type="text" placeholder="e.g. Aspiring entrepreneurs, little tech experience">
+        <input id="f-user" type="text" placeholder="e.g. Aspiring entrepreneurs, little tech experience" maxlength="200">
       </div>
 
       <div class="divider"></div>
@@ -504,97 +350,18 @@ header {
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
-/* ── PROMPTS ── */
-const PM_SYSTEM = `You are an AI Product Manager and Junior Software Architect.
-Transform the raw idea into a clear, structured, executable software plan.
-Follow this EXACT structure — never skip sections.
-
-1. PROJECT SUMMARY
-- What is being built / Who it is for / What problem it solves
-
-2. MVP FEATURES (ONLY 3–5)
-- Essential features only, no nice-to-haves, each clearly defined
-
-3. USER FLOW (STEP-BY-STEP)
-- How a user interacts from start to finish
-
-4. TECHNICAL PLAN (BEGINNER-FRIENDLY)
-- Simple stack recommendation (Next.js, API routes, minimal backend)
-- Reason for each choice, no unnecessary complexity
-
-5. SYSTEM DESIGN (SIMPLE)
-- Frontend responsibilities / Backend responsibilities / AI integration points
-
-6. STEP-BY-STEP BUILD PLAN
-- Clear actionable steps, assume a beginner builder
-
-7. RISKS & LIMITATIONS
-- What could go wrong / Where user may struggle / What is intentionally simplified
-
-8. IMMEDIATE NEXT ACTION
-- One specific action to take in the next 30 minutes
-
-9. AI BUILDER HANDOFF PROMPT
-A clean copy-paste prompt for an AI coding assistant:
-project description, features, tech stack, requirements (beginner-friendly, step-by-step, no skipped steps)
-
-RULES: Be concise but specific. No vague advice. No overengineering. Simplest working solution.`;
-
-const CRITIC_SYSTEM = `You are a strict technical reviewer.
-Review the plan and identify issues, then rewrite it to be simpler, clearer, and more actionable.
-Do NOT add new features — only improve clarity and execution.
-
-Respond in EXACTLY this format:
-
-ISSUES FOUND
-[numbered list of specific issues]
-
-REVISED PLAN
-[improved rewritten plan using the same 9-section structure]`;
-
 /* ── STATE ── */
 const S = { plan: '', critic: '', handoff: '' };
 
-/* ── API KEY MANAGEMENT ── */
-function getKey() { return sessionStorage.getItem('qi_apikey') || ''; }
-
-function saveKey() {
-  const inp = document.getElementById('keyInput');
-  const val = inp.value.trim();
-  const err = document.getElementById('keyErr');
-  // Strict format: sk-ant- prefix, min 20 chars, alphanumeric + hyphens/underscores only
-  const KEY_RE = /^sk-ant-[A-Za-z0-9_-]{20,}$/;
-  if (!KEY_RE.test(val)) {
-    inp.classList.add('error');
-    err.classList.add('show');
-    return;
-  }
-  sessionStorage.setItem('qi_apikey', val);
-  inp.value = '';                  // clear from DOM immediately after storing
-  document.getElementById('keyOverlay').classList.add('hidden');
-  document.getElementById('keyIndicator').style.display = 'flex';
-  inp.classList.remove('error');
-  err.classList.remove('show');
-}
-
-function resetKey() {
-  sessionStorage.removeItem('qi_apikey');
-  document.getElementById('keyInput').value = '';
-  document.getElementById('keyOverlay').classList.remove('hidden');
-  document.getElementById('keyIndicator').style.display = 'none';
-}
-
-// On load: restore key if already set this session
-(function init() {
-  if (getKey()) {
-    document.getElementById('keyOverlay').classList.add('hidden');
-    document.getElementById('keyIndicator').style.display = 'flex';
-  }
-})();
+/* ── INPUT ALLOWLISTS ── */
+const VALID = {
+  priority: new Set(['Speed', 'Scalability', 'Balanced']),
+  exp:      new Set(['Beginner', 'Intermediate']),
+  depth:    new Set(['Simple', 'Detailed'])
+};
 
 /* ── RADIO GROUPS ── */
 document.querySelectorAll('.radio-group').forEach(group => {
@@ -607,65 +374,34 @@ document.querySelectorAll('.radio-group').forEach(group => {
   });
 });
 
-/* ── FORM → PROMPT ── */
-// Hard limits: prevent prompt injection and runaway API costs
-const LIMITS = { idea: 1500, user: 200 };
-
-function sanitizeInput(str, maxLen) {
-  // Trim, collapse excessive whitespace, enforce length cap
-  return str.trim().replace(/\s{5,}/g, '\n').slice(0, maxLen);
+/* ── SANITIZE + FORM VALUES ── */
+function sanitize(str, max) {
+  return (str || '').trim().replace(/\s{5,}/g, '\n').slice(0, max);
 }
 
-function getPrompt() {
-  const idea = sanitizeInput(document.getElementById('f-idea').value, LIMITS.idea);
-  const user = sanitizeInput(document.getElementById('f-user').value, LIMITS.user);
-  if (!idea || !user) return null;
-
-  // Allowlist-validate radio/select values — never trust DOM values blindly
-  const PRIORITIES = ['Speed', 'Scalability', 'Balanced'];
-  const EXP_LEVELS = ['Beginner', 'Intermediate'];
-  const DEPTHS     = ['Simple', 'Detailed'];
-  const priority = PRIORITIES.includes(document.querySelector('[name=priority]:checked')?.value)
-    ? document.querySelector('[name=priority]:checked').value : 'Balanced';
-  const exp = EXP_LEVELS.includes(document.querySelector('[name=exp]:checked')?.value)
-    ? document.querySelector('[name=exp]:checked').value : 'Beginner';
-  const depth = DEPTHS.includes(document.getElementById('f-depth').value)
-    ? document.getElementById('f-depth').value : 'Detailed';
-
-  return [
-    `IDEA:\n${idea}`,
-    `TARGET USER:\n${user}`,
-    `PRIORITY:\n${priority}`,
-    `EXPERIENCE LEVEL:\n${exp}`,
-    `OUTPUT DEPTH:\n${depth}`
-  ].join('\n\n');
+function getFormValues() {
+  const priority = document.querySelector('[name=priority]:checked')?.value;
+  const exp      = document.querySelector('[name=exp]:checked')?.value;
+  const depth    = document.getElementById('f-depth').value;
+  return {
+    idea:       sanitize(document.getElementById('f-idea').value, 1500),
+    targetUser: sanitize(document.getElementById('f-user').value, 200),
+    priority:   VALID.priority.has(priority) ? priority : 'Balanced',
+    expLevel:   VALID.exp.has(exp)           ? exp      : 'Beginner',
+    depth:      VALID.depth.has(depth)       ? depth    : 'Detailed'
+  };
 }
 
-/* ── API ── */
-async function callClaude(system, userMsg) {
-  const key = getKey();
-  if (!key) { resetKey(); throw new Error('No API key — please connect your key first.'); }
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+/* ── API — calls our secure serverless proxy ── */
+async function callAPI(body) {
+  const res = await fetch('/api/generate', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system,
-      messages: [{ role: 'user', content: userMsg }]
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
   });
-  if (!res.ok) {
-    const errData = await res.json().catch(() => ({}));
-    throw new Error(errData?.error?.message || `API error ${res.status}`);
-  }
-  const d = await res.json();
-  return d.content?.map(b => b.text || '').join('') || '';
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Server error ${res.status}`);
+  return data.text;
 }
 
 /* ── PROGRESS ── */
@@ -682,52 +418,51 @@ function setProg(v) { clearInterval(_pt); document.getElementById('progFill').st
 
 /* ── PIPELINE ── */
 let _lastRun = 0;
-const RATE_LIMIT_MS = 5000; // minimum 5s between runs
+const RATE_LIMIT_MS = 5000;
 
 async function runPipeline() {
   const now = Date.now();
   if (now - _lastRun < RATE_LIMIT_MS) {
     const wait = Math.ceil((RATE_LIMIT_MS - (now - _lastRun)) / 1000);
-    render('plan', `<div class="section-body" style="border-color:var(--accent);color:var(--label)">Please wait ${wait}s before running again.</div>`);
+    showError(`Please wait ${wait}s before running again.`);
     return;
   }
   _lastRun = now;
 
-  const userMsg = getPrompt();
-  if (!userMsg) { alert('Please fill in Idea and Target User.'); return; }
+  const vals = getFormValues();
+  if (!vals.idea || !vals.targetUser) { alert('Please fill in Idea and Target User.'); return; }
 
   setLoading(true);
   resetOutputs();
   startProg(42);
 
   try {
-    // Step 1: Plan
-    S.plan = await callClaude(PM_SYSTEM, userMsg);
+    // Step 1: Generate plan
+    S.plan = await callAPI({ step: 'plan', ...vals });
     S.handoff = extractSection(S.plan, 9);
     render('plan', planHTML(S.plan));
     setProg(50);
 
-    // Step 2: Critic (auto)
+    // Step 2: Auto-critique
     dot(true);
     startProg(92);
-    S.critic = await callClaude(CRITIC_SYSTEM, `Review this plan:\n\n${S.plan}`);
-    render('critic', criticHTML(S.critic));
+    S.critic = await callAPI({ step: 'critic', planText: S.plan });
+    render('critic',  criticHTML(S.critic));
     render('compare', compareHTML(S.plan, S.critic));
     render('handoff', handoffHTML(S.handoff));
     setProg(100);
 
   } catch (e) {
-    render('plan', `<div class="section-body" style="border-color:var(--red);color:var(--red)">Error: ${e.message}</div>`);
+    showError(e.message);
   } finally {
     setLoading(false);
     dot(false);
   }
 }
 
-/* ── FORMATTERS ── */
-// Sanitize: escape raw HTML first, then selectively re-allow our own tags
+/* ── SANITIZE OUTPUT (XSS protection) ── */
 function escHtml(str) {
-  return str
+  return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -736,13 +471,12 @@ function escHtml(str) {
 }
 
 function fmt(text) {
-  // 1. Escape everything (neutralises any injected HTML from AI output)
-  // 2. Re-apply only our controlled markdown → safe HTML transforms
   return escHtml(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/`([^`]+)`/g, '<code>$1</code>');
 }
 
+/* ── RENDERERS ── */
 function parseSecs(text) {
   return text.split(/(?=^\d+\.\s)/m).filter(s => s.trim());
 }
@@ -753,23 +487,20 @@ function secHTML(sec, i) {
   const body   = lines.slice(1).join('\n').trim();
   const num    = header.match(/^(\d+)\./)?.[1] || (i + 1);
   const title  = header.replace(/^\d+\.\s*/, '');
-  return `<div class="section" style="animation-delay:${i*.05}s">
+  return `<div class="section" style="animation-delay:${i * .05}s">
     <div class="section-hd">
-      <span class="section-num">${num}</span>
-      <span class="section-title">${title}</span>
+      <span class="section-num">${escHtml(num)}</span>
+      <span class="section-title">${escHtml(title)}</span>
     </div>
     <div class="section-body">${fmt(body)}</div>
   </div>`;
 }
 
-function planHTML(text) {
-  return parseSecs(text).map(secHTML).join('');
-}
+function planHTML(text)  { return parseSecs(text).map(secHTML).join(''); }
 
 function extractSection(text, n) {
   const m = text.match(new RegExp(`${n}\\.\\s*[\\s\\S]*?(?=\\n\\d+\\.|$)`, 'i'));
-  if (m) return m[0].replace(/^\d+\.\s*[^\n]*\n/, '').trim();
-  return text;
+  return m ? m[0].replace(/^\d+\.\s*[^\n]*\n/, '').trim() : text;
 }
 
 function criticHTML(text) {
@@ -789,22 +520,15 @@ function criticHTML(text) {
 }
 
 function compareHTML(plan, critic) {
-  const revM = critic.match(/REVISED PLAN([\s\S]*)/i);
+  const revM    = critic.match(/REVISED PLAN([\s\S]*)/i);
   const revised = revM?.[1]?.trim() || plan;
   return `<div class="compare-grid">
-    <div class="compare-col col-original">
-      <h3><em>Original</em> Plan</h3>
-      ${parseSecs(plan).map(secHTML).join('')}
-    </div>
-    <div class="compare-col col-revised">
-      <h3><em>Revised</em> Plan</h3>
-      ${parseSecs(revised).map(secHTML).join('')}
-    </div>
+    <div class="compare-col col-original"><h3><em>Original</em> Plan</h3>${parseSecs(plan).map(secHTML).join('')}</div>
+    <div class="compare-col col-revised"><h3><em>Revised</em> Plan</h3>${parseSecs(revised).map(secHTML).join('')}</div>
   </div>`;
 }
 
 function handoffHTML(text) {
-  // Use the shared escHtml() — consistent, complete escaping (not just < and >)
   return `<div class="handoff-box">
     <button class="copy-btn" id="copyBtn" onclick="copyHandoff()">Copy</button>
     ${escHtml(text)}
@@ -813,15 +537,19 @@ function handoffHTML(text) {
 
 /* ── UI HELPERS ── */
 function render(key, html) {
-  document.getElementById(`empty-${key}`).style.display  = 'none';
+  document.getElementById(`empty-${key}`).style.display = 'none';
   const c = document.getElementById(`content-${key}`);
   c.innerHTML = html;
   c.style.display = 'block';
 }
 
+function showError(msg) {
+  render('plan', `<div class="section-body" style="border-color:var(--red);color:var(--red)">${escHtml(msg)}</div>`);
+}
+
 function resetOutputs() {
   ['plan','critic','compare','handoff'].forEach(k => {
-    document.getElementById(`empty-${k}`).style.display   = 'flex';
+    document.getElementById(`empty-${k}`).style.display = 'flex';
     const c = document.getElementById(`content-${k}`);
     c.innerHTML = ''; c.style.display = 'none';
   });
@@ -829,10 +557,10 @@ function resetOutputs() {
 }
 
 function setLoading(on) {
-  document.getElementById('runBtn').disabled   = on;
-  document.getElementById('spin').style.display  = on ? 'block' : 'none';
-  document.getElementById('btnIcon').style.display = on ? 'none'  : 'inline';
-  document.getElementById('btnLabel').textContent  = on ? 'Running pipeline…' : 'Generate + Critique';
+  document.getElementById('runBtn').disabled          = on;
+  document.getElementById('spin').style.display       = on ? 'block' : 'none';
+  document.getElementById('btnIcon').style.display    = on ? 'none'  : 'inline';
+  document.getElementById('btnLabel').textContent     = on ? 'Running pipeline…' : 'Generate + Critique';
 }
 
 function dot(on) {
@@ -840,10 +568,9 @@ function dot(on) {
 }
 
 const VALID_TABS = new Set(['plan', 'critic', 'compare', 'handoff']);
-
 function switchTab(el) {
   const tab = el.dataset.tab;
-  if (!VALID_TABS.has(tab)) return;  // reject unknown tab names
+  if (!VALID_TABS.has(tab)) return;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
